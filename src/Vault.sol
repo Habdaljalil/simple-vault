@@ -5,11 +5,10 @@ import {VaultAccount} from "./VaultAccount.sol";
 
 error ACCOUNT__DOES__NOT__EXIST();
 
-
 contract Vault {
     // creates a new VaultAccount contract when called
     // mostly a manager/proxy for different Accounts
-    mapping (address => VaultAccount[]) private userToAccounts;
+    mapping(address => VaultAccount[]) private userToAccounts;
 
     modifier accountExists(address payable _accountAddress) {
         _accountExists(_accountAddress);
@@ -33,9 +32,9 @@ contract Vault {
         }
     }
 
-    function createAccount(string memory _name) external payable returns(address) {
+    function createAccount(string memory _name) external payable returns (address) {
         VaultAccount newAccount = new VaultAccount(msg.sender, _name);
-        newAccount.deposit(msg.value);
+        // Implement intial fund
         VaultAccount[] storage userAccounts = userToAccounts[msg.sender];
         userAccounts.push(newAccount);
         return address(newAccount);
@@ -43,14 +42,14 @@ contract Vault {
 
     function fundAccount(address payable _accountAddress) external payable accountExists(_accountAddress) {
         VaultAccount account = VaultAccount(_accountAddress);
-        account.deposit(msg.value);
+        account.deposit{value: msg.value}();
     }
 
     function getAccounts() external view returns (VaultAccount[] memory) {
         return userToAccounts[msg.sender];
     }
 
-    function getAccountByID(uint256 _id) external view accountIDExists(_id)returns (VaultAccount) {
+    function getAccountByID(uint256 _id) external view accountIDExists(_id) returns (VaultAccount) {
         return userToAccounts[msg.sender][_id];
     }
 }
