@@ -53,13 +53,6 @@ contract VaultAccount {
         deposit(msg.value);
     }
 
-    // IMPLEMENT FALLBACK
-
-    // Create --> constructor
-    // Send/withdraw
-    // Ownership
-    // Receive/fallback function
-
     function getBalance() external view returns(uint256) {
         return payable(this).balance;
     }

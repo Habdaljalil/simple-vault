@@ -22,6 +22,17 @@ contract Vault {
         }
     }
 
+    modifier accountIDExists(uint256 _id) {
+        _accountIDExists(_id);
+        _;
+    }
+
+    function _accountIDExists(uint256 _id) private view {
+        if (_id > (userToAccounts[msg.sender].length - 1)) {
+            revert ACCOUNT__DOES__NOT__EXIST();
+        }
+    }
+
     function createAccount(string memory _name) external payable returns(address) {
         VaultAccount newAccount = new VaultAccount(msg.sender, _name);
         newAccount.deposit(msg.value);
@@ -35,6 +46,11 @@ contract Vault {
         account.deposit(msg.value);
     }
 
-    // Implement delete + clear functions
-    // Implement ext view functions
+    function getAccounts() external view returns (VaultAccount[] memory) {
+        return userToAccounts[msg.sender];
+    }
+
+    function getAccountByID(uint256 _id) external view accountIDExists(_id)returns (VaultAccount) {
+        return userToAccounts[msg.sender][_id];
+    }
 }
