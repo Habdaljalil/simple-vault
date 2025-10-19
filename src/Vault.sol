@@ -5,7 +5,6 @@ import {VaultAccount} from "./VaultAccount.sol";
 
 error ACCOUNT__DOES__NOT__EXIST();
 
-
 contract Vault {
     // creates a new VaultAccount contract when called
     // mostly a manager/proxy for different Accounts
