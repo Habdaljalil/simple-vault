@@ -3,8 +3,6 @@ pragma solidity ^0.8.30;
 
 import {VaultAccount} from "./VaultAccount.sol";
 
-error ACCOUNT__DOES__NOT__EXIST();
-
 contract Vault {
     // creates a new VaultAccount contract when called
     // mostly a manager/proxy for different Accounts
@@ -16,7 +14,8 @@ contract Vault {
     }
 
     function _accountExists(address payable _accountAddress) private view {
-        if (VaultAccount(_accountAddress).getOwner() == address(0)) {
+        try VaultAccount(_accountAddress).getOwner() returns (address owner) {}
+        catch {
             revert ACCOUNT__DOES__NOT__EXIST();
         }
     }
@@ -27,17 +26,23 @@ contract Vault {
     }
 
     function _accountIDExists(uint256 _id) private view {
-        if (_id > (userToAccounts[msg.sender].length - 1)) {
+        if (userToAccounts[msg.sender].length >= 1) {
+            if (_id > ((userToAccounts[msg.sender].length) - 1)) {
+                revert ACCOUNT__DOES__NOT__EXIST();
+            }
+        } else {
             revert ACCOUNT__DOES__NOT__EXIST();
         }
     }
 
-    function createAccount(string memory _name) external payable returns (address) {
+    error ACCOUNT__DOES__NOT__EXIST();
+
+    function createAccount(string memory _name) external payable returns (VaultAccount) {
         VaultAccount newAccount = new VaultAccount(msg.sender, _name);
         // Implement intial fund
         VaultAccount[] storage userAccounts = userToAccounts[msg.sender];
         userAccounts.push(newAccount);
-        return address(newAccount);
+        return newAccount;
     }
 
     function fundAccount(address payable _accountAddress) external payable accountExists(_accountAddress) {
