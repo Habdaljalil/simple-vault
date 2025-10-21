@@ -14,7 +14,7 @@ contract Vault {
     }
 
     function _accountExists(address payable _accountAddress) private view {
-        try VaultAccount(_accountAddress).getOwner() returns (address owner) {}
+        try VaultAccount(_accountAddress).getOwner() returns (address) {}
         catch {
             revert ACCOUNT__DOES__NOT__EXIST();
         }
