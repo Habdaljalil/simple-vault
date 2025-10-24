@@ -13,13 +13,12 @@ contract TestVaultIntegration is Test {
     uint256 constant DEPOSIT_AMOUNT = 1 ether;
 
     function setUp() public {
-        DeployVault deployVault = new DeployVault(payable(OWNER));
+        DeployVault deployVault = new DeployVault();
         vault = deployVault.run();
         vm.deal(OWNER, STARTING_OWNER_BALANCE);
     }
 
     function testOwnerInteractionsWithVault(string memory _name, uint256 _amount, uint256 _numberOfContracts) public {
-
         _amount = bound(_amount, 0 ether, 10 ether);
         _numberOfContracts = bound(_numberOfContracts, 1, 20);
         vm.startPrank(OWNER);
@@ -44,6 +43,6 @@ contract TestVaultIntegration is Test {
 
         vm.stopPrank();
 
-        assertEq(payable(OWNER).balance, DEPOSIT_AMOUNT*10);
+        assertEq(payable(OWNER).balance, DEPOSIT_AMOUNT * 10);
     }
 }

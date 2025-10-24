@@ -16,8 +16,8 @@ contract TestVaultAccount is Test {
     uint256 constant INITIAL_BALANCE = 10 ether;
 
     function setUp() public {
-        DeployVaultAccount deployVaultAccount = new DeployVaultAccount(payable(OWNER), ACCOUNT_NAME);
-        vaultAccount = deployVaultAccount.run();
+        DeployVaultAccount deployVaultAccount = new DeployVaultAccount();
+        vaultAccount = deployVaultAccount.run(payable(OWNER), ACCOUNT_NAME);
         vm.deal(OWNER, INITIAL_BALANCE);
     }
 

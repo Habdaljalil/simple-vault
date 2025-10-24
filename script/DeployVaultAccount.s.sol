@@ -7,17 +7,10 @@ import {VaultAccount} from "../src/VaultAccount.sol";
 // Fix default sender
 contract DeployVaultAccount is Script {
     VaultAccount private vaultAccount;
-    address payable immutable I_OWNER;
-    string private ACCOUNT_NAME;
 
-    constructor(address payable _owner, string memory _accountName) {
-        I_OWNER = _owner;
-        ACCOUNT_NAME = _accountName;
-    }
-
-    function run() public returns (VaultAccount) {
+    function run(address payable _owner, string memory _accountName) public returns (VaultAccount) {
         vm.startBroadcast();
-        vaultAccount = new VaultAccount(I_OWNER, ACCOUNT_NAME);
+        vaultAccount = new VaultAccount(_owner, _accountName);
         vm.stopBroadcast();
 
         return vaultAccount;

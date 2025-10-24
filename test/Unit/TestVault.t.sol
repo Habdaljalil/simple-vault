@@ -16,7 +16,7 @@ contract TestVault is Test {
     string constant ACCOUNT_NAME = "ACCOUNT 1";
 
     function setUp() public {
-        DeployVault deployVault = new DeployVault(payable(OWNER));
+        DeployVault deployVault = new DeployVault();
         vault = deployVault.run();
 
         vm.deal(OWNER, STARTING_OWNER_BALANCE);

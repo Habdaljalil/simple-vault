@@ -6,16 +6,11 @@ import {Vault} from "../src/Vault.sol";
 
 contract DeployVault is Script {
     Vault vault;
-    address payable immutable I_OWNER;
-
-    constructor(address payable _owner) {
-        I_OWNER = _owner;
-    }
 
     function run() public returns (Vault) {
-        vm.startPrank(I_OWNER);
+        vm.startBroadcast();
         vault = new Vault();
-        vm.stopPrank();
+        vm.stopBroadcast();
         return vault;
     }
 }
